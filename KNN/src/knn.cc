@@ -131,14 +131,17 @@ double knn::validate_perforamnce()
 {
   double current_performance = 0;
   int count = 0;
+  int data_index = 0;
   for(data *query_point : *validation_data)
   {
     find_knearest(query_point);
     int prediction = find_most_frequent_class();
+    data_index++;
     if(prediction == query_point->get_label())
     {
       count++;
     }
+    printf("Current Performance: %.3f %%\n", ((double)count)*100.0 / ((double)data_index));
   }
   current_performance = ((double)count)*100.0/((double)validation_data->size());
   printf("Validation Performance for K = %d: %.3f\n", k, current_performance);
@@ -178,7 +181,7 @@ main()
   double performance = 0;
   double best_performance = 0;
   int best_k = 1;
-  for(int k = 1; k <= 100; k++)
+  for(int k = 1; k <= 3; k++)
   {
     if(k == 1)
     {
