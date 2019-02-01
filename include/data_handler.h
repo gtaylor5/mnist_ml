@@ -32,6 +32,7 @@ class data_handler
   void split_data();
   void count_classes();
   
+  int get_class_counts();
   int get_data_array_size();
   int get_training_data_size();
   int get_test_data_size();

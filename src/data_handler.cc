@@ -1,4 +1,4 @@
-#include "data_handler.h"
+#include "../include/data_handler.h"
 
 data_handler::data_handler()
 {
@@ -186,6 +186,11 @@ void data_handler::count_classes()
   }
   class_counts = count;
   printf("Successfully Extraced %d Unique Classes.\n", class_counts);
+}
+
+int data_handler::get_class_counts()
+{
+  return class_counts;
 }
 
 int data_handler::get_data_array_size()
