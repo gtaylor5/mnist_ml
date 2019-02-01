@@ -1,5 +1,4 @@
 #include "../include/kmeans.hpp"
-#include "data_handler.h"
 
 kmeans::kmeans(int k)
 {

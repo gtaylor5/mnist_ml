@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <map>
+#include "data_handler.h"
 typedef struct cluster 
 {
  std::vector<double> *centroid;
