@@ -46,6 +46,7 @@ void add_to_cluster(data* point)
    {
      class_counts[point->get_label()]++;
    }
+   set_most_frequent_class();
  }
  void set_most_frequent_class()
  {
