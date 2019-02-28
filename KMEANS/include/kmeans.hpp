@@ -77,5 +77,6 @@ class kmeans : public common_data
   double euclidean_distance(std::vector<double> *, data *);
   double validate();
   double test();
+  std::vector<cluster_t *> * get_clusters();
 };
 #endif

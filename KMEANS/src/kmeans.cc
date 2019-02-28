@@ -109,6 +109,11 @@ double kmeans::test()
  return 100.0 * (num_correct / (double) test_data->size());
 }
 
+std::vector<cluster_t *> * kmeans::get_clusters()
+{
+  return this->clusters;
+}
+/*
 int
 main()
 {
@@ -145,3 +150,4 @@ main()
   printf("Overall Performance: %.2f\n",km->test());
 
 }
+*/
