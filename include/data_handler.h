@@ -43,7 +43,7 @@ class data_handler
   std::vector<data *> * get_training_data();
   std::vector<data *> * get_test_data();
   std::vector<data *> * get_validation_data();
-
+  std::map<uint8_t, int> get_class_map();
 
 };
 

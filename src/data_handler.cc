@@ -230,3 +230,8 @@ std::vector<data *> * data_handler::get_validation_data()
 {
   return validation_data;
 }
+
+std::map<uint8_t, int> data_handler::get_class_map()
+{
+  return class_map;
+}
