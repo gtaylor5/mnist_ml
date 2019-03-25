@@ -8,23 +8,25 @@
 
 typedef struct rbfneuron
 {
-  std::vector<double> *center;
-  const double sigma = 1.5;
+  std::vector<double> *center = NULL;
+  double sigma = 1.5;
   double output;
 
   void activate(data* query_point)
   {
-    double dot = get_norm(query_point->get_feature_vector());
+    //query_point->print_normalized_vector();
+    double dot = get_norm(query_point->get_normalized_feature_vector());
     double gaussian = (-1.0) / (2.0 * pow(sigma, 2));
     output = exp(gaussian*dot);
+ //   fprintf(stderr, "Output: %.5f\n", output);
   }
 
-  double get_norm(std::vector<uint8_t> *feature_vector)
+  double get_norm(std::vector<double> *feature_vector)
   {
     double dist = 0.0;
     for(int i = 0; i < feature_vector->size(); i++)
     {
-      dist += pow((double)feature_vector->at(i) - center->at(i), 2);
+      dist += (double)pow(feature_vector->at(i) - center->at(i), 2);
     }
     return sqrt(dist);
   }

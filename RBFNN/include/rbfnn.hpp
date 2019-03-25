@@ -14,7 +14,7 @@ class rbfnn : public common_data
 
   public:
 
-  rbfnn(std::map<uint8_t, int> class_map, std::vector<cluster_t *> * clusters);
+  rbfnn(std::map<uint8_t, int> class_map, std::vector<cluster_t *> * clusters, int size);
   ~rbfnn();
 
   void calculate_basis_outputs(data* query_point);
@@ -22,6 +22,7 @@ class rbfnn : public common_data
   void calculate_network_outputs();
   void update_weights(data *);
   void train();
+  double validate();
   void test();
 
 };
