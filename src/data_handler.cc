@@ -65,9 +65,10 @@ void data_handler::read_input_data(std::string path)
       }
       data_array->push_back(d);
     }
+    normalize();
     feature_vector_size = data_array->at(0)->get_feature_vector()->size();
     printf("Successfully read %lu data entries.\n", data_array->size());
-    printf("The Feature Vector Size is: %d", feature_vector_size);
+    printf("The Feature Vector Size is: %d\n", feature_vector_size);
   } else
   {
     printf("Invalid Input File Path\n");
@@ -186,6 +187,46 @@ void data_handler::count_classes()
   }
   class_counts = count;
   printf("Successfully Extraced %d Unique Classes.\n", class_counts);
+}
+
+void data_handler::normalize()
+{
+  std::vector<double> min_list, max_list;
+  // fill min and max lists
+  
+  data *d = data_array->at(0);
+  for(auto val : *d->get_feature_vector())
+  {
+    min_list.push_back((double) val);
+    max_list.push_back((double) val);
+  }
+
+  for(int i = 1; i < data_array->size(); i++)
+  {
+    d = data_array->at(i);
+    for(int j = 0; j < d->get_feature_vector_size(); j++)
+    {
+      if(d->get_feature_vector()->at(j) < min_list.at(j))
+        min_list[j] = (double)d->get_feature_vector()->at(j);
+      if(d->get_feature_vector()->at(j) > max_list.at(j))
+        max_list[j] = (double)d->get_feature_vector()->at(j);
+    }
+  }
+
+  // normalize data array
+  
+  for(int i = 0; i < data_array->size(); i++)
+  {
+    data_array->at(i)->set_normalized_feature_vector(new std::vector<double>());
+    for(int j = 0; j < data_array->at(i)->get_feature_vector_size(); j++)
+    {
+      double val_prime = data_array->at(i)->get_feature_vector()->at(j) - min_list.at(j);
+      val_prime /= (max_list[j] - min_list[j]);
+      if(isnan(val_prime))
+        val_prime = 0;
+      data_array->at(i)->append_to_feature_vector(val_prime);
+    }
+  }
 }
 
 int data_handler::get_class_counts()

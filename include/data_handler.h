@@ -8,6 +8,7 @@
 #include <string>
 #include <map>
 #include <unordered_set>
+#include <math.h>
 
 class data_handler
 {
@@ -31,6 +32,7 @@ class data_handler
   void read_label_data(std::string path);
   void split_data();
   void count_classes();
+  void normalize();
   
   int get_class_counts();
   int get_data_array_size();

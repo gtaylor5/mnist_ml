@@ -8,9 +8,17 @@ void data::set_feature_vector(std::vector<uint8_t>* vect)
 {
   m_feature_vector = vect;
 }
+void data::set_normalized_feature_vector(std::vector<double>* vect)
+{
+  m_normalized_feature_vector = vect;
+}
 void data::append_to_feature_vector(uint8_t val)
 {
   m_feature_vector->push_back(val);
+}
+void data::append_to_feature_vector(double val)
+{
+  m_normalized_feature_vector->push_back(val);
 }
 void data::set_label(uint8_t val)
 {
@@ -29,6 +37,17 @@ void data::print_vector()
     printf("%u ", val);
   }
   printf("]\n");
+}
+
+void data::print_normalized_vector()
+{
+  printf("[ ");
+  for(auto val : *m_normalized_feature_vector)
+  {
+    printf("%.2f ", val);
+  }
+  printf("]\n");
+  
 }
 
 double data::get_distance()
@@ -52,4 +71,8 @@ uint8_t data::get_enumerated_label()
 std::vector<uint8_t> * data::get_feature_vector()
 {
   return m_feature_vector;
+}
+std::vector<double> * data::get_normalized_feature_vector()
+{
+  return m_normalized_feature_vector;
 }
