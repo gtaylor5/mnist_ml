@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cmath>
+#include <math.h>
 #include <map>
 #include "data_handler.h"
 typedef struct cluster 
@@ -18,9 +19,12 @@ typedef struct cluster
  {
    centroid = new std::vector<double>;
    cluster_points = new std::vector<data *>;
-   for(auto val : *(initial_point->get_feature_vector()))
+   for(auto val : *(initial_point->get_normalized_feature_vector()))
    {
-     centroid->push_back(val);
+     if(isnan(val))
+       centroid->push_back(0);
+     else
+      centroid->push_back(val);
    }
    cluster_points->push_back(initial_point);
    class_counts[initial_point->get_label()] = 1;
@@ -35,7 +39,7 @@ void add_to_cluster(data* point)
    {
    	double val = centroid->at(i);
      val *= previous_size;
-     val += point->get_feature_vector()->at(i);
+     val += point->get_normalized_feature_vector()->at(i);
      val /= (double)cluster_points->size();
      centroid->at(i) = val;
    }

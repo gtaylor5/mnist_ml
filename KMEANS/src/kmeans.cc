@@ -64,7 +64,7 @@ double kmeans::euclidean_distance(std::vector<double> * centroid, data *query_po
  double dist = 0.0;
  for(int i = 0; i < centroid->size(); i++)
  {
-   dist += pow(centroid->at(i) - query_point->get_feature_vector()->at(i), 2);
+   dist += pow(centroid->at(i) - query_point->get_normalized_feature_vector()->at(i), 2);
  }
  return sqrt(dist);
 }
