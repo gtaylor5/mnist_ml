@@ -12,6 +12,38 @@ data_handler::~data_handler()
   // FIX ME
 }
 
+void data_handler::read_csv(std::string path, std::string delimiter)
+{
+  class_counts = 0;
+  std::ifstream data_file(path.c_str());
+  std::string line;
+  while(std::getline(data_file, line))
+  {
+    if(line.length() == 0) continue;
+    data *d = new data();
+    d->set_normalized_feature_vector(new std::vector<double>());
+    size_t position = 0;
+    std::string token;
+    while((position = line.find(delimiter)) != std::string::npos)
+    {
+      token = line.substr(0, position);
+      d->append_to_feature_vector(std::stod(token));
+      line.erase(0, position + delimiter.length());
+    }
+    if(classMap.find(line) != classMap.end())
+    {
+      d->set_label(classMap[line]);
+    } else 
+    {
+      classMap[line] = class_counts;
+      d->set_label(classMap[token]);
+      class_counts++;
+    }
+    data_array->push_back(d);
+  }
+  feature_vector_size = data_array->at(0)->get_normalized_feature_vector()->size();
+}
+
 void data_handler::read_input_data(std::string path)
 {
   uint32_t magic = 0;
@@ -184,8 +216,14 @@ void data_handler::count_classes()
       data_array->at(i)->set_enumerated_label(count);
       count++;
     }
+    else 
+    {
+      data_array->at(i)->set_enumerated_label(class_map[data_array->at(i)->get_label()]);
+    }
   }
   class_counts = count;
+  for(data *data : *data_array)
+    data->setClassVector(class_counts);
   printf("Successfully Extraced %d Unique Classes.\n", class_counts);
 }
 
@@ -218,6 +256,7 @@ void data_handler::normalize()
   for(int i = 0; i < data_array->size(); i++)
   {
     data_array->at(i)->set_normalized_feature_vector(new std::vector<double>());
+    data_array->at(i)->setClassVector(class_counts);
     for(int j = 0; j < data_array->at(i)->get_feature_vector_size(); j++)
     {
       double val_prime = data_array->at(i)->get_feature_vector()->at(j) - min_list.at(j);
@@ -276,3 +315,38 @@ std::map<uint8_t, int> data_handler::get_class_map()
 {
   return class_map;
 }
+
+void data_handler::print()
+{
+  printf("Training Data:\n");
+  for(auto data : *training_data)
+  {
+    for(auto value : *data->get_normalized_feature_vector())
+    {
+      printf("%.3f,", value);
+    }
+    printf(" ->   %d\n", data->get_label());
+  }
+
+  printf("Test Data:\n");
+  for(auto data : *test_data)
+  {
+    for(auto value : *data->get_normalized_feature_vector())
+    {
+      printf("%.3f,", value);
+    }
+    printf(" ->   %d\n", data->get_label());
+  }
+
+  printf("Validation Data:\n");
+  for(auto data : *validation_data)
+  {
+    for(auto value : *data->get_normalized_feature_vector())
+    {
+      printf("%.3f,", value);
+    }
+    printf(" ->   %d\n", data->get_label());
+  }
+
+}
+

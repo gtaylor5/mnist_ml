@@ -8,7 +8,6 @@ all : $(LIB_DATA)
 
 $(LIB_DATA) : libdir objdir obj/data_handler.o obj/data.o obj/common.o
 	$(CC) $(CFLAGS) -o $(MNIST_ML_ROOT)/lib/$(LIB_DATA) obj/data_handler.o obj/data.o obj/common.o
-	rm -r $(MNIST_ML_ROOT)/obj
 
 libdir :
 	mkdir -p $(MNIST_ML_ROOT)/lib

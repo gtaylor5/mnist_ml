@@ -99,15 +99,15 @@ int knn::find_most_frequent_class()
 double knn::calculate_distance(data* query_point, data* input)
 {
   double value = 0;
-  if(query_point->get_feature_vector_size() != input->get_feature_vector_size())
+  if(query_point->get_normalized_feature_vector()->size() != input->get_normalized_feature_vector()->size())
   {
     printf("Vector size mismatch.\n");
     exit(1);
   }
 #ifdef EUCLID
-  for(unsigned i = 0; i < query_point->get_feature_vector_size(); i++)
+  for(unsigned i = 0; i < query_point->get_normalized_feature_vector()->size(); i++)
   {
-    value += pow(query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i),2);
+    value += pow(query_point->get_normalized_feature_vector()->at(i) - input->get_normalized_feature_vector()->at(i),2);
   }
   return sqrt(value);
 #elif defined MANHATTAN
@@ -157,12 +157,13 @@ int
 main()
 {
   data_handler *dh = new data_handler();
-  dh->read_input_data("../train-images-idx3-ubyte");
-  dh->read_label_data("../train-labels-idx1-ubyte");
+  dh->read_csv("/home/gerardta/iris.data",",");
+  //dh->read_input_data("../train-images-idx3-ubyte");
+  //dh->read_label_data("../train-labels-idx1-ubyte");
   dh->count_classes();
   dh->split_data();
   knn *nearest = new knn();
-  nearest->set_k(1);
+  nearest->set_k(3);
   nearest->set_training_data(dh->get_training_data());
   nearest->set_test_data(dh->get_test_data());
   nearest->set_validation_data(dh->get_validation_data());

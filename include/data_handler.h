@@ -19,20 +19,23 @@ class data_handler
   int class_counts;
   int feature_vector_size;
   std::map<uint8_t, int> class_map;
+  std::map<std::string, int> classMap; //string key
 
   public:
-  const double TRAIN_SET_PERCENT = 0.75;
-  const double TEST_SET_PERCENT = 0.20;
-  const double VALID_SET_PERCENT = 0.05;
+  const double TRAIN_SET_PERCENT = .1;
+  const double TEST_SET_PERCENT = .075;
+  const double VALID_SET_PERCENT = 0.005;
 
   data_handler();
   ~data_handler();
-
+  
+  void read_csv(std::string, std::string);
   void read_input_data(std::string path);
   void read_label_data(std::string path);
   void split_data();
   void count_classes();
   void normalize();
+  void print();
   
   int get_class_counts();
   int get_data_array_size();
