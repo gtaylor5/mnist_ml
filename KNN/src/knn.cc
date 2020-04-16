@@ -3,87 +3,87 @@
 #include <limits>
 #include <map>
 #include "stdint.h"
-#include "data_handler.h"
+#include "DataHandler.h"
 
 
-knn::knn(int val)
+KNN::KNN(int val)
 {
   k = val;
 }
 
-knn::knn()
+KNN::KNN()
 {
 
 }
 
-knn::~knn()
+KNN::~KNN()
 {
   // NOTHING TO DO 
 }
 
-void knn::find_knearest(data *query_point)
+void KNN::findKnearest(Data *queryPoint)
 {
-  neighbors = new std::vector<data *>;
+  neighbors = new std::vector<Data *>;
   double min = std::numeric_limits<double>::max();
-  double previous_min = min;
+  double previousMin = min;
   int index;
   for(int i = 0; i < k; i++)
   {
     if(i == 0)
     {
-      for(int j = 0; j < training_data->size(); j++)
+      for(int j = 0; j < trainingData->size(); j++)
       {
-        double dist = calculate_distance(query_point, training_data->at(j));
-        training_data->at(j)->set_distance(dist);
+        double dist = calculateDistance(queryPoint, trainingData->at(j));
+        trainingData->at(j)->setDistance(dist);
         if(dist < min)
         {
           min = dist;
           index = j;
         }
       }
-      neighbors->push_back(training_data->at(index));
-      previous_min = min;
+      neighbors->push_back(trainingData->at(index));
+      previousMin = min;
       min = std::numeric_limits<double>::max();
     } else 
     {
-      for(int j = 0; j < training_data->size(); j++)
+      for(int j = 0; j < trainingData->size(); j++)
       {
-        double dist = training_data->at(j)->get_distance();
-        if(dist > previous_min && dist < min)
+        double dist = trainingData->at(j)->getDistance();
+        if(dist > previousMin && dist < min)
         {
           min = dist;
           index = j;
         }
       }
-      neighbors->push_back(training_data->at(index));
-      previous_min = min;
+      neighbors->push_back(trainingData->at(index));
+      previousMin = min;
       min = std::numeric_limits<double>::max();
     }
   }
 }
-void knn::set_k(int val)
+void KNN::setK(int val)
 {
   k = val;
 }
 
-int knn::find_most_frequent_class()
+int KNN::findMostFrequentClass()
 {
-  std::map<uint8_t, int> freq_map;
+  std::map<uint8_t, int> frequencyMap;
   for(int i = 0; i < neighbors->size(); i++)
   {
-    if(freq_map.find(neighbors->at(i)->get_label()) == freq_map.end())
+    if(frequencyMap.find(neighbors->at(i)->getLabel()) == frequencyMap.end())
     {
-      freq_map[neighbors->at(i)->get_label()] = 1;
+      frequencyMap[neighbors->at(i)->getLabel()] = 1;
     } else 
     {
-      freq_map[neighbors->at(i)->get_label()]++;
+      frequencyMap[neighbors->at(i)->getLabel()]++;
     }
   }
 
   int best = 0;
   int max = 0;
 
-  for(auto kv : freq_map)
+  for(auto kv : frequencyMap)
   {
     if(kv.second > max)
     {
@@ -96,18 +96,18 @@ int knn::find_most_frequent_class()
 
 }
 
-double knn::calculate_distance(data* query_point, data* input)
+double KNN::calculateDistance(Data* queryPoint, Data* input)
 {
   double value = 0;
-  if(query_point->get_normalized_feature_vector()->size() != input->get_normalized_feature_vector()->size())
+  if(queryPoint->getNormalizedFeatureVector()->size() != input->getNormalizedFeatureVector()->size())
   {
     printf("Vector size mismatch.\n");
     exit(1);
   }
 #ifdef EUCLID
-  for(unsigned i = 0; i < query_point->get_normalized_feature_vector()->size(); i++)
+  for(unsigned i = 0; i < queryPoint->getNormalizedFeatureVector()->size(); i++)
   {
-    value += pow(query_point->get_normalized_feature_vector()->at(i) - input->get_normalized_feature_vector()->at(i),2);
+    value += pow(queryPoint->getNormalizedFeatureVector()->at(i) - input->getNormalizedFeatureVector()->at(i),2);
   }
   return sqrt(value);
 #elif defined MANHATTAN
@@ -115,40 +115,40 @@ double knn::calculate_distance(data* query_point, data* input)
 #endif
 }
 
-double knn::validate_perforamnce()
+double KNN::validatePerformance()
 {
   double current_performance = 0;
   int count = 0;
   int data_index = 0;
-  for(data *query_point : *validation_data)
+  for(Data *queryPoint : *validationData)
   {
-    find_knearest(query_point);
-    int prediction = find_most_frequent_class();
+    findKnearest(queryPoint);
+    int prediction = findMostFrequentClass();
     data_index++;
-    if(prediction == query_point->get_label())
+    if(prediction == queryPoint->getLabel())
     {
       count++;
     }
-    printf("Current Performance: %.3f %%\n", ((double)count)*100.0 / ((double)data_index));
+    printf("Current Performance: %.3f %%\n", ((double) count)*100.0 / ((double) data_index));
   }
-  current_performance = ((double)count)*100.0/((double)validation_data->size());
+  current_performance = ((double) count)*100.0/((double) validationData->size());
   printf("Validation Performance for K = %d: %.3f\n", k, current_performance);
   return current_performance;
 }
-double knn::test_performance()
+double KNN::testPerformance()
 {
   double current_performance = 0;
   int count = 0;
-  for(data *query_point : *test_data)
+  for(Data *queryPoint : *testData)
   {
-    find_knearest(query_point);
-    int prediction = find_most_frequent_class();
-    if(prediction == query_point->get_label())
+    findKnearest(queryPoint);
+    int prediction = findMostFrequentClass();
+    if(prediction == queryPoint->getLabel())
     {
       count++;
     }
   }
-  current_performance = ((double)count)*100.0/((double)test_data->size());
+  current_performance = ((double) count)*100.0/((double) testData->size());
   printf("Validation Performance for K = %d: %.3f\n", k, current_performance);
   return current_performance;
 }
@@ -156,17 +156,17 @@ double knn::test_performance()
 int
 main()
 {
-  data_handler *dh = new data_handler();
-  dh->read_csv("/home/gerardta/iris.data",",");
-  //dh->read_input_data("../train-images-idx3-ubyte");
-  //dh->read_label_data("../train-labels-idx1-ubyte");
-  dh->count_classes();
-  dh->split_data();
-  knn *nearest = new knn();
-  nearest->set_k(3);
-  nearest->set_training_data(dh->get_training_data());
-  nearest->set_test_data(dh->get_test_data());
-  nearest->set_validation_data(dh->get_validation_data());
+  DataHandler *dh = new DataHandler();
+  //dh->read_csv("/home/gerardta/iris.data",",");
+  dh->readInputData("../train-images-idx3-ubyte");
+  dh->readLabelData("../train-labels-idx1-ubyte");
+  dh->countClasses();
+  dh->splitData();
+  KNN *nearest = new KNN();
+  nearest->setK(3);
+  nearest->setTrainingData(dh->getTrainingData());
+  nearest->setTestData(dh->getTestData());
+  nearest->setValidationData(dh->getValidationData());
   double performance = 0;
   double best_performance = 0;
   int best_k = 1;
@@ -174,12 +174,12 @@ main()
   {
     if(k == 1)
     {
-      performance = nearest->validate_perforamnce();
+      performance = nearest->validatePerformance();
       best_performance = performance;
     } else 
     {
-      nearest->set_k(k);
-      performance = nearest->validate_perforamnce();
+      nearest->setK(k);
+      performance = nearest->validatePerformance();
       if(performance > best_performance)
       {
         best_performance = performance;
@@ -187,6 +187,6 @@ main()
       }
     }
   }
-  nearest->set_k(best_k);
-  nearest->test_performance();
+  nearest->setK(best_k);
+  nearest->testPerformance();
 }
