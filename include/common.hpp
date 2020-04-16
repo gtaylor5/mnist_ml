@@ -1,16 +1,16 @@
 #ifndef __COMMON_HPP
 #define __COMMON_HPP
-#include "data.h"
+#include "Data.h"
 #include <vector>
-class common_data 
+class CommonData 
 {
  protected:
- std::vector<data *> *training_data;
- std::vector<data *> *test_data;
- std::vector<data *> *validation_data;
+ std::vector<Data *> *trainingData;
+ std::vector<Data *> *testData;
+ std::vector<Data *> *validationData;
  public:
- void set_training_data(std::vector<data *> * vect);
- void set_test_data(std::vector<data *> * vect);
- void set_validation_data(std::vector<data *> * vect);
+ void setTrainingData(std::vector<Data *> * vect);
+ void setTestData(std::vector<Data *> * vect);
+ void setValidationData(std::vector<Data *> * vect);
 };
 #endif

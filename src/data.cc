@@ -1,62 +1,62 @@
-#include "../include/data.h"
+#include "../include/Data.h"
 
-void data::set_distance(double dist)
+void Data::setDistance(double dist)
 {
-  m_distance = dist;
+  distance = dist;
 }
-void data::set_feature_vector(std::vector<uint8_t>* vect)
+void Data::setFeatureVector(std::vector<uint8_t>* vect)
 {
-  m_feature_vector = vect;
-}
-
-
-void data::set_normalized_feature_vector(std::vector<double>* vect)
-{
-  m_normalized_feature_vector = vect;
-}
-void data::append_to_feature_vector(uint8_t val)
-{
-  m_feature_vector->push_back(val);
-}
-void data::append_to_feature_vector(double val)
-{
-  m_normalized_feature_vector->push_back(val);
-}
-void data::set_label(uint8_t val)
-{
-  m_label = val;
-}
-void data::set_enumerated_label(uint8_t val)
-{
-  m_enumerated_label = val;
+  featureVector = vect;
 }
 
-void data::setClassVector(int classCounts)
+
+void Data::setNormalizedFeatureVector(std::vector<double>* vect)
 {
-  class_vector = new std::vector<int>();
+  normalizedFeatureVector = vect;
+}
+void Data::appendToFeatureVector(uint8_t val)
+{
+  featureVector->push_back(val);
+}
+void Data::appendToFeatureVector(double val)
+{
+  normalizedFeatureVector->push_back(val);
+}
+void Data::setLabel(uint8_t val)
+{
+  label = val;
+}
+void Data::setEnumeratedLabel(uint8_t val)
+{
+  enumeratedLabel = val;
+}
+
+void Data::setClassVector(int classCounts)
+{
+  classVector = new std::vector<int>();
   for(int i = 0; i < classCounts; i++)
   {
-    if(i == m_label)
-      class_vector->push_back(1);
+    if(i == label)
+      classVector->push_back(1);
     else
-      class_vector->push_back(0);
+      classVector->push_back(0);
   }
 }
 
-void data::print_vector()
+void Data::printVector()
 {
   printf("[ ");
-  for(uint8_t val : *m_feature_vector)
+  for(uint8_t val : *featureVector)
   {
     printf("%u ", val);
   }
   printf("]\n");
 }
 
-void data::print_normalized_vector()
+void Data::printNormalizedVector()
 {
   printf("[ ");
-  for(auto val : *m_normalized_feature_vector)
+  for(auto val : *normalizedFeatureVector)
   {
     printf("%.2f ", val);
   }
@@ -64,34 +64,34 @@ void data::print_normalized_vector()
   
 }
 
-double data::get_distance()
+double Data::getDistance()
 {
-  return m_distance;
+  return distance;
 }
 
-int data::get_feature_vector_size()
+int Data::getFeatureVectorSize()
 {
-  return m_feature_vector->size();
+  return featureVector->size();
 }
-uint8_t data::get_label()
+uint8_t Data::getLabel()
 {
-  return m_label;
+  return label;
 }
-uint8_t data::get_enumerated_label()
+uint8_t Data::getEnumeratedLabel()
 {
-  return m_enumerated_label;
-}
-
-std::vector<uint8_t> * data::get_feature_vector()
-{
-  return m_feature_vector;
-}
-std::vector<double> * data::get_normalized_feature_vector()
-{
-  return m_normalized_feature_vector;
+  return enumeratedLabel;
 }
 
-std::vector<int>  data::getClassVector()
+std::vector<uint8_t> * Data::getFeatureVector()
 {
-  return *class_vector;
+  return featureVector;
+}
+std::vector<double> * Data::getNormalizedFeatureVector()
+{
+  return normalizedFeatureVector;
+}
+
+std::vector<int>  Data::getClassVector()
+{
+  return *classVector;
 }

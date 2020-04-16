@@ -15,14 +15,14 @@ libdir :
 objdir:
 	mkdir -p $(MNIST_ML_ROOT)/obj
 
-obj/data_handler.o: $(SRC)/data_handler.cc
-	$(CC) -fPIC $(CFLAGS) -o obj/data_handler.o -I$(INCLUDE_DIR)/*.h -c $(SRC)/data_handler.cc
+obj/data_handler.o: $(SRC)/DataHandler.cc
+	$(CC) -fPIC $(CFLAGS) -o obj/data_handler.o -I$(INCLUDE_DIR)/*.h -c $(SRC)/DataHandler.cc
 
-obj/data.o: $(SRC)/data.cc
-	$(CC) -fPIC $(CFLAGS)  -o obj/data.o -I$(INCLUDE_DIR)/*.h -c $(SRC)/data.cc
+obj/data.o: $(SRC)/Data.cc
+	$(CC) -fPIC $(CFLAGS)  -o obj/data.o -I$(INCLUDE_DIR)/*.h -c $(SRC)/Data.cc
 
-obj/common.o: $(SRC)/common.cc
-	$(CC) -fPIC $(CFLAGS)  -o obj/common.o -I$(INCLUDE_DIR)/* -c $(SRC)/common.cc
+obj/common.o: $(SRC)/Common.cc
+	$(CC) -fPIC $(CFLAGS)  -o obj/common.o -I$(INCLUDE_DIR)/* -c $(SRC)/Common.cc
 
 clean:
 	rm -r $(MNIST_ML_ROOT)/lib
