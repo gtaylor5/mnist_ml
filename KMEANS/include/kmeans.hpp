@@ -1,6 +1,6 @@
 #ifndef __KMEANS_HPP
 #define __KMEANS_HPP
-#include "common.hpp"
+#include "Common.hpp"
 #include <unordered_set>
 #include <limits>
 #include <vector>
@@ -8,55 +8,55 @@
 #include <cmath>
 #include <math.h>
 #include <map>
-#include "data_handler.h"
+#include "DataHandler.h"
 typedef struct cluster 
 {
  std::vector<double> *centroid;
- std::vector<data *> *cluster_points;
- std::map<int, int> class_counts;
- int most_frequent_class;
- cluster(data *initial_point)
+ std::vector<Data *> *clusterPoints;
+ std::map<int, int> classCounts;
+ int mostFrequentClass;
+ cluster(Data *initialPoint)
  {
    centroid = new std::vector<double>;
-   cluster_points = new std::vector<data *>;
-   for(auto val : *(initial_point->get_normalized_feature_vector()))
+   clusterPoints = new std::vector<Data *>;
+   for(auto val : *(initialPoint->getNormalizedFeatureVector()))
    {
      if(isnan(val))
        centroid->push_back(0);
      else
       centroid->push_back(val);
    }
-   cluster_points->push_back(initial_point);
-   class_counts[initial_point->get_label()] = 1;
-   most_frequent_class = initial_point->get_label();
+   clusterPoints->push_back(initialPoint);
+   classCounts[initialPoint->getLabel()] = 1;
+   mostFrequentClass = initialPoint->getLabel();
  }
  
-void add_to_cluster(data* point)
+void add_to_cluster(Data* point)
  {
-   int previous_size = cluster_points->size();
-   cluster_points->push_back(point);
+   int previous_size = clusterPoints->size();
+   clusterPoints->push_back(point);
    for(int i = 0; i < centroid->size(); i++)
    {
    	double val = centroid->at(i);
      val *= previous_size;
-     val += point->get_normalized_feature_vector()->at(i);
-     val /= (double)cluster_points->size();
+     val += point->getNormalizedFeatureVector()->at(i);
+     val /= (double)clusterPoints->size();
      centroid->at(i) = val;
    }
-   if(class_counts.find(point->get_label()) == class_counts.end())
+   if(classCounts.find(point->getLabel()) == classCounts.end())
    {
-     class_counts[point->get_label()] = 1;
+     classCounts[point->getLabel()] = 1;
    } else
    {
-     class_counts[point->get_label()]++;
+     classCounts[point->getLabel()]++;
    }
-   set_most_frequent_class();
+   set_mostFrequentClass();
  }
- void set_most_frequent_class()
+ void set_mostFrequentClass()
  {
    int best_class;
    int freq = 0;
-   for(auto kv : class_counts)
+   for(auto kv : classCounts)
    {
     if(kv.second > freq)
     {
@@ -64,23 +64,23 @@ void add_to_cluster(data* point)
       best_class = kv.first;
     }
    }
-   most_frequent_class = best_class;
+   mostFrequentClass = best_class;
  }
 } cluster_t;
 
-class kmeans : public common_data
+class kmeans : public CommonData
 {
-  int num_clusters;
+  int numClusters;
   std::vector<cluster_t *> *clusters;
-  std::unordered_set<int> *used_indexes;
+  std::unordered_set<int> *usedIndexes;
   public:
   kmeans(int k);
-  void init_clusters();
-  void init_clusters_for_each_class();
+  void initClusters();
+  void initClustersForEachClass();
   void train();
-  double euclidean_distance(std::vector<double> *, data *);
+  double euclideanDistance(std::vector<double> *, Data *);
   double validate();
   double test();
-  std::vector<cluster_t *> * get_clusters();
+  std::vector<cluster_t *> * getClusters();
 };
 #endif
