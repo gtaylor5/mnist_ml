@@ -1,6 +1,6 @@
 #ifndef __COMMON_HPP
 #define __COMMON_HPP
-#include "Data.h"
+#include "data.h"
 #include <vector>
 class CommonData 
 {

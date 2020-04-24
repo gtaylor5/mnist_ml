@@ -4,24 +4,25 @@
 #include "data.h"
 #include "neuron.hpp"
 #include "layer.hpp"
-#include "hidden_layer.hpp"
 #include "input_layer.hpp"
-#include "output_layer.hpp"
 #include "common.hpp"
 
-class Network : public common_data
+class Network : public CommonData
 {
   private:
     InputLayer *inputLayer;
-    OutputLayer *outputLayer;
-    std::vector<HiddenLayer *> hiddenLayers;
+    std::vector<Layer *> layers;
     double eta;
+    int iteration = 0;
   public:
+    int target;
+    double testPerformance;
     Network(std::vector<int> hiddenLayerSpec, int, int);
     ~Network();
-    void fprop(data *data);
-    void bprop(data *data);
-    void updateWeights();
+    void fprop(Data *data);
+    void bprop(Data *data);
+    void updateWeights(Data *data);
+    void threadedTrain(std::vector<Data *>, int start, int end);
     void train();
     void test();
     void validate();

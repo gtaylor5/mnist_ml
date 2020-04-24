@@ -6,6 +6,6 @@ class InputLayer : public Layer {
   
   public:
     InputLayer(int prev, int curr) : Layer(prev, curr){}
-    void setLayerOutputs(data *d);
+    void setLayerOutputs(Data *d);
 };
 #endif

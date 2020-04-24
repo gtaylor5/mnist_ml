@@ -1,4 +1,4 @@
-#include "../include/Data.h"
+#include "../include/data.h"
 
 void Data::setDistance(double dist)
 {

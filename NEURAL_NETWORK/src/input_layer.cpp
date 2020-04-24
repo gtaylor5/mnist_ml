@@ -1,6 +1,6 @@
 #include "input_layer.hpp"
 
-void InputLayer::setLayerOutputs(data *d)
+void InputLayer::setLayerOutputs(Data *d)
 {
-  this->layerOutputs = *d->get_normalized_feature_vector();
+    this->layerOutputs = *d->getNormalizedFeatureVector();
 }

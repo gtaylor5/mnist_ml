@@ -18,9 +18,12 @@ DataHandler::~DataHandler()
 
 void DataHandler::readCsv(std::string path, std::string delimiter)
 {
+  fprintf(stderr,"Here\n %s\n", path.c_str());
   class_counts = 0;
-  std::ifstream data_file(path.c_str());
+  std::ifstream data_file;
+  data_file.open(path.c_str());
   std::string line;
+
   while(std::getline(data_file, line))
   {
     if(line.length() == 0) continue;
@@ -34,6 +37,7 @@ void DataHandler::readCsv(std::string path, std::string delimiter)
       d->appendToFeatureVector(std::stod(token));
       line.erase(0, position + delimiter.length());
     }
+
     if(classFromString.find(line) != classFromString.end())
     {
       d->setLabel(classFromString[line]);
@@ -45,6 +49,9 @@ void DataHandler::readCsv(std::string path, std::string delimiter)
     }
     dataArray->push_back(d);
   }
+  for(Data *data : *dataArray)
+    data->setClassVector(class_counts);;
+  normalize();
   featureVectorSize = dataArray->at(0)->getNormalizedFeatureVector()->size();
 }
 
@@ -100,6 +107,7 @@ void DataHandler::readInputData(std::string path)
         }
       }
       dataArray->push_back(d);
+      dataArray->back()->setClassVector(class_counts);
     }
     normalize();
     featureVectorSize = dataArray->at(0)->getFeatureVector()->size();
@@ -212,6 +220,7 @@ void DataHandler::countClasses()
       dataArray->at(i)->setEnumeratedLabel(classFromInt[dataArray->at(i)->getLabel()]);
     }
   }
+  
   class_counts = count;
   for(Data *data : *dataArray)
     data->setClassVector(class_counts);
@@ -220,14 +229,14 @@ void DataHandler::countClasses()
 
 void DataHandler::normalize()
 {
-  std::vector<double> min_list, max_list;
+  std::vector<double> mins, maxs;
   // fill min and max lists
   
   Data *d = dataArray->at(0);
   for(auto val : *d->getFeatureVector())
   {
-    min_list.push_back((double) val);
-    max_list.push_back((double) val);
+    mins.push_back(val);
+    maxs.push_back(val);
   }
 
   for(int i = 1; i < dataArray->size(); i++)
@@ -235,13 +244,11 @@ void DataHandler::normalize()
     d = dataArray->at(i);
     for(int j = 0; j < d->getFeatureVectorSize(); j++)
     {
-      if(d->getFeatureVector()->at(j) < min_list.at(j))
-        min_list[j] = (double)d->getFeatureVector()->at(j);
-      if(d->getFeatureVector()->at(j) > max_list.at(j))
-        max_list[j] = (double)d->getFeatureVector()->at(j);
+      double value = (double) d->getFeatureVector()->at(j);
+      if(value < mins.at(j)) mins[j] = value;
+      if(value > maxs.at(j)) maxs[j] = value;
     }
   }
-
   // normalize data array
   
   for(int i = 0; i < dataArray->size(); i++)
@@ -250,11 +257,9 @@ void DataHandler::normalize()
     dataArray->at(i)->setClassVector(class_counts);
     for(int j = 0; j < dataArray->at(i)->getFeatureVectorSize(); j++)
     {
-      double val_prime = dataArray->at(i)->getFeatureVector()->at(j) - min_list.at(j);
-      val_prime /= (max_list[j] - min_list[j]);
-      if(isnan(val_prime))
-        val_prime = 0;
-      dataArray->at(i)->appendToFeatureVector(val_prime);
+      if(maxs[j] - mins[j] == 0) dataArray->at(i)->appendToFeatureVector(0.0);
+      else
+        dataArray->at(i)->appendToFeatureVector((double)(dataArray->at(i)->getFeatureVector()->at(j) - mins[j])/(maxs[j]-mins[j]));
     }
   }
 }
@@ -318,6 +323,7 @@ void DataHandler::print()
     }
     printf(" ->   %d\n", data->getLabel());
   }
+  return;
 
   printf("Test Data:\n");
   for(auto data : *testData)

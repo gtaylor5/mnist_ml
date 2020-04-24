@@ -3,7 +3,7 @@
 
 #include "fstream"
 #include "stdint.h"
-#include "Data.h"
+#include "data.h"
 #include <vector>
 #include <string>
 #include <map>
@@ -22,9 +22,9 @@ class DataHandler
   std::map<std::string, int> classFromString; //string key
 
   public:
-  const double TRAIN_SET_PERCENT = .1;
-  const double TEST_SET_PERCENT = .075;
-  const double VALID_SET_PERCENT = 0.005;
+  const double TRAIN_SET_PERCENT = .75;
+  const double TEST_SET_PERCENT = .20;
+  const double VALID_SET_PERCENT = 0.05;
 
   DataHandler();
   ~DataHandler();

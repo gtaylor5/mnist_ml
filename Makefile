@@ -1,13 +1,13 @@
 CC=g++
 INCLUDE_DIR := $(MNIST_ML_ROOT)/include
 SRC := $(MNIST_ML_ROOT)/src
-CFLAGS := -shared -std=c++11 -g
+CFLAGS := -std=c++11 -g
 LIB_DATA := libdata.so
 
 all : $(LIB_DATA)
 
 $(LIB_DATA) : libdir objdir obj/data_handler.o obj/data.o obj/common.o
-	$(CC) $(CFLAGS) -o $(MNIST_ML_ROOT)/lib/$(LIB_DATA) obj/data_handler.o obj/data.o obj/common.o
+	$(CC) $(CFLAGS) -shared -o $(MNIST_ML_ROOT)/lib/$(LIB_DATA) obj/data_handler.o obj/data.o obj/common.o
 
 libdir :
 	mkdir -p $(MNIST_ML_ROOT)/lib

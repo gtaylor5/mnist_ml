@@ -1,4 +1,4 @@
-#include "../include/Common.hpp"
+#include "../include/common.hpp"
 
 void CommonData::setTrainingData(std::vector<Data *> * vect)
 {
