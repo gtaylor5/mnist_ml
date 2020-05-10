@@ -4,27 +4,25 @@
 #include "data.h"
 #include "neuron.hpp"
 #include "layer.hpp"
-#include "input_layer.hpp"
 #include "common.hpp"
 
 class Network : public CommonData
 {
-  private:
-    InputLayer *inputLayer;
-    std::vector<Layer *> layers;
-    double eta;
-    int iteration = 0;
   public:
-    int target;
+    std::vector<Layer *> layers;
+    double learningRate;
     double testPerformance;
-    Network(std::vector<int> hiddenLayerSpec, int, int);
+    Network(std::vector<int> spec, int, int, double);
     ~Network();
-    void fprop(Data *data);
+    std::vector<double> fprop(Data *data);
+    double activate(std::vector<double>, std::vector<double>); // dot product
+    double transfer(double);
+    double transferDerivative(double); // used for backprop
     void bprop(Data *data);
     void updateWeights(Data *data);
-    void threadedTrain(std::vector<Data *>, int start, int end);
-    void train();
-    void test();
+    int predict(Data *data); // return the index of the maximum value in the output array.
+    void train(int); // num iterations
+    double test();
     void validate();
 };
 

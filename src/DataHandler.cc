@@ -18,7 +18,6 @@ DataHandler::~DataHandler()
 
 void DataHandler::readCsv(std::string path, std::string delimiter)
 {
-  fprintf(stderr,"Here\n %s\n", path.c_str());
   class_counts = 0;
   std::ifstream data_file;
   data_file.open(path.c_str());
@@ -51,7 +50,7 @@ void DataHandler::readCsv(std::string path, std::string delimiter)
   }
   for(Data *data : *dataArray)
     data->setClassVector(class_counts);;
-  normalize();
+  //normalize();
   featureVectorSize = dataArray->at(0)->getNormalizedFeatureVector()->size();
 }
 
@@ -259,7 +258,8 @@ void DataHandler::normalize()
     {
       if(maxs[j] - mins[j] == 0) dataArray->at(i)->appendToFeatureVector(0.0);
       else
-        dataArray->at(i)->appendToFeatureVector((double)(dataArray->at(i)->getFeatureVector()->at(j) - mins[j])/(maxs[j]-mins[j]));
+        dataArray->at(i)->appendToFeatureVector(
+          (double)(dataArray->at(i)->getFeatureVector()->at(j) - mins[j])/(maxs[j]-mins[j]));
     }
   }
 }
