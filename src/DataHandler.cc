@@ -51,7 +51,7 @@ void DataHandler::readCsv(std::string path, std::string delimiter)
   }
   for(Data *data : *dataArray)
     data->setClassVector(class_counts);;
-  normalize();
+  //normalize();
   featureVectorSize = dataArray->at(0)->getNormalizedFeatureVector()->size();
 }
 

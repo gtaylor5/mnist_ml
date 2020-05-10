@@ -16,28 +16,8 @@ void Neuron::initializeWeights(int previousLayerSize, int currentLayerSize)
 {
     std::default_random_engine generator;
     std::normal_distribution<double> distribution(0.0, 1.0);
-    for(int i = 0; i < previousLayerSize; i++)
+    for(int i = 0; i < previousLayerSize + 1; i++) // +1 to include bias
     {
-        weights.push_back(generateRandomNumder(-0.5, 0.5));
+      weights.push_back(generateRandomNumder(-1.0, 1.0));
     }
-}
-
-double Neuron::activate(std::vector<double> input)
-{
-  this->activation = this->bias;
-  for(int i = 0; i < input.size(); i++)
-  {
-    this->activation += weights.at(i) * input.at(i);
-  }
-  return this->activation;
-}
-
-double Neuron::transfer(double activation)
-{
-  return (1.0 / (1 + exp(activation)));
-}
-
-double Neuron::transferDerivative(double output)
-{
-  return output * (1 - output);
 }

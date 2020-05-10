@@ -8,15 +8,4 @@ Layer::Layer(int previousLayerSize, int currentLayerSize)
         this->layerOutputs.push_back(0.0);
     }
     this->currentLayerSize = currentLayerSize;
-    this->id = ++layerId;
-}
-
-Layer::~Layer()
-{
-
-}
-
-Layer::Layer()
-{
-
 }

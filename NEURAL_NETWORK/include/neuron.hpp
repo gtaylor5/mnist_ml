@@ -6,18 +6,11 @@
 
 class Neuron {
   public:
-    std::vector<double> weights;
-    double bias;
-    double delta;
     double output;
-    double activation;
+    double delta;
+    std::vector<double> weights;
     Neuron(int, int);
-
     void initializeWeights(int, int);
-    double activate(std::vector<double>);
-    double transfer(double value);
-    double transferDerivative(double value);
-
 };
 
 #endif

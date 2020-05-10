@@ -9,22 +9,21 @@
 
 class Network : public CommonData
 {
-  private:
-    InputLayer *inputLayer;
+  public:
     std::vector<Layer *> layers;
     double eta;
-    int iteration = 0;
-  public:
-    int target;
     double testPerformance;
-    Network(std::vector<int> hiddenLayerSpec, int, int);
+    Network(std::vector<int> hiddenLayerSpec, int, int, double);
     ~Network();
-    void fprop(Data *data);
+    std::vector<double> fprop(Data *data);
+    double activate(std::vector<double>, std::vector<double>);
+    double transfer(double);
+    double transferDerivative(double);
     void bprop(Data *data);
     void updateWeights(Data *data);
-    void threadedTrain(std::vector<Data *>, int start, int end);
-    void train();
-    void test();
+    int predict(Data *data);
+    void train(int);
+    double test();
     void validate();
 };
 
